@@ -13,6 +13,7 @@ import SupabaseAuth from './components/SupabaseAuth.vue'
 
 const settings = reactive(store.load())   // User settings loaded from storage
 const month = reactive({ value: '' })   // Selected month for transactions
+const year = reactive({ value: '' })   // Selected year for transactions
 const rawRows = reactive([])      // Raw CSV rows imported
 const staged = reactive([])   // Staged transactions after import
 const username = reactive([])   // Staged transactions after import
@@ -106,7 +107,10 @@ function addCategory() {
 function saveTransactions() {
   try {
     saveMsg.value = 'Saving...'
-    const key = `nextmonth_${month.value || 'unspecified'}`
+    const [y, m, _] = month.value.split('-');
+    month.value = String(Number(m) + 1);
+    year.value = y;
+    const key = `nextmonth_${year.value || 'XXXX'}_${month.value || 'XX'}`
     localStorage.setItem(key, JSON.stringify(staged))
     saveMsg.value = 'Saved locally.'
   } catch(e) {
@@ -119,12 +123,16 @@ function saveTransactions() {
 // Compute insights (totals, net, etc.) from staged transactions
 function computeInsights() {
   if (!staged.length) { insights.value = null; return }
-  const monthLabel = (month.value ? month.value : (staged[0].date||'').slice(0,7))
+  const monthLabel = (month.value)
+  console.log('Computing insights for', monthLabel)
+  console.log('month:', month.value)
+  console.log('Staged transactions 0:', staged[0])
+  const yearLabel = (year.value)
   const incomeTotal = staged.filter(t=>t.amount>0).reduce((a,b)=>a+b.amount,0)
   const foreseeableTotal = staged.filter(t=>t.amount<0 && t.foreseeable).reduce((a,b)=>a+Math.abs(b.amount),0)
   const unforeseeableTotal = staged.filter(t=>t.amount<0 && !t.foreseeable).reduce((a,b)=>a+Math.abs(b.amount),0)
   const net = incomeTotal - (foreseeableTotal + unforeseeableTotal)
-  insights.value = { monthLabel, incomeTotal, foreseeableTotal, unforeseeableTotal, net,
+  insights.value = { monthLabel, yearLabel, incomeTotal, foreseeableTotal, unforeseeableTotal, net,
     bufferTarget: 0, reserveNow: 0, investableNow: Math.max(0, net) }
 }
 

@@ -18,7 +18,7 @@ const props = defineProps({
 
 async function handleSave() {
   try {
-    await saveInsights(props.insights, 'September', '2025')
+    await saveInsights(props.insights, props.insights.monthLabel, props.insights.yearLabel)
     alert('Insights saved successfully!')
   } catch (err) {
     alert('Error saving insights: ' + err.message)
