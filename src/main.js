@@ -1,6 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+// Supabase client
+import { createClient } from '@supabase/supabase-js'
+
+// Init Supabase client once
+const supabaseUrl = 'https://YOUR-PROJECT.supabase.co'
+const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
 // Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

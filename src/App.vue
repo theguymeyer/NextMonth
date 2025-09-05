@@ -9,11 +9,13 @@ import ConnectAccount from './components/ConnectAccount.vue'
 import ImportCsv from './components/ImportCsv.vue'
 import TransactionsTable from './components/TransactionsTable.vue'
 import Insights from './components/Insights.vue'
+import SupabaseAuth from './components/SupabaseAuth.vue'
 
 const settings = reactive(store.load())   // User settings loaded from storage
 const month = reactive({ value: '' })   // Selected month for transactions
 const rawRows = reactive([])      // Raw CSV rows imported
 const staged = reactive([])   // Staged transactions after import
+const username = reactive([])   // Staged transactions after import
 const categories = reactive([
   'Rent',
   'Utilities',
@@ -77,6 +79,12 @@ function confirmImport() {
   rawRows.forEach(r => staged.push(normalizeRow(r)))
 }
 
+// Update username for all staged transactions
+function updateUsername(newUsername) {
+  console.log('Updating username to', newUsername)
+  username.value = newUsername
+}
+
 // Computed filtered list of staged transactions based on filters
 const filteredStaged = computed(() =>
   staged.filter(t=>{
@@ -129,14 +137,21 @@ async function testConnection(){ connectionMsg.value = 'Dummy: not connected' }
 
 <template>
   <div>
+      
+    <!-- User authentication component -->
+    <SupabaseAuth @updateUsername="updateUsername"/>
 
-    <!-- Account connection settings component -->
+    <!-- Account connection settings component
     <ConnectAccount :settings="settings" :connectionMsg="connectionMsg"
-                    @saveSettings="saveSettings" @testConnection="testConnection"/>
+                    @saveSettings="saveSettings" @testConnection="testConnection"/> -->
 
     <!-- CSV import component -->
-    <ImportCsv :month="month" :rawRows="rawRows" :monthOptions="monthOptions"
-               @onFile="onFile" @confirmImport="confirmImport"/>
+    <ImportCsv v-if="username.value"
+                :month="month" 
+                :rawRows="rawRows" 
+                :monthOptions="monthOptions"
+                @onFile="onFile" 
+                @confirmImport="confirmImport"/>
 
     <!-- Transactions table, shown if there are staged transactions -->
     <TransactionsTable v-if="staged.length"
@@ -146,6 +161,6 @@ async function testConnection(){ connectionMsg.value = 'Dummy: not connected' }
 
     <!-- Insights summary, shown if insights are available -->
     <Insights v-if="insights" :insights="insights" :money="money"/>
-    
+
   </div>
 </template>

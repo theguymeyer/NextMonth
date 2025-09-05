@@ -18,7 +18,23 @@
     <button id="installBtn" class="btn ghost" hidden>Add to Home Screen</button>
   </header>
 
-  <main id="app"></main>
+  <main id="app">
+    <section class="card" v-if="!session">
+      <h2>Login / Signup</h2>
+      <input v-model="authEmail" placeholder="Email">
+      <input v-model="authPassword" placeholder="Password" type="password">
+      <div class="row">
+        <button class="btn" @click="signIn">Sign in</button>
+        <button class="btn ghost" @click="signUp">Sign up</button>
+      </div>
+    </section>
+
+    <section v-else class="card">
+      <h2>Welcome</h2>
+      <p>{{ session.user.email }}</p>
+      <button class="btn ghost" @click="signOut">Sign out</button>
+    </section>
+  </main>
 
   <!-- Vite injects scripts -->
   <script type="module" src="/src/main.js"></script>

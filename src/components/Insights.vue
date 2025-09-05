@@ -1,4 +1,5 @@
 <script setup>
+import { saveInsights } from '../api/insights'
 import { Pie } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -14,6 +15,15 @@ const props = defineProps({
   insights: Object,
   money: Function
 })
+
+async function handleSave() {
+  try {
+    await saveInsights(props.insights, 'September', '2025')
+    alert('Insights saved successfully!')
+  } catch (err) {
+    alert('Error saving insights: ' + err.message)
+  }
+}
 
 const chartData = {
   labels: ['Foreseeable', 'Unforeseeable'],
@@ -42,7 +52,8 @@ const chartOptions = {
 
 <template>
   <section class="card">
-    <h2>4) Insights</h2>
+    <h2>Insights</h2>
+    <button @click="handleSave">💾 Save Insights</button>
     <div style="max-width: 60%; margin: 0 auto;">
       <Pie :data="chartData" :options="chartOptions" />
     </div>
