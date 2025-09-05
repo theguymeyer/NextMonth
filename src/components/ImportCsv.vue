@@ -10,7 +10,7 @@ const emit = defineEmits(['onFile', 'confirmImport'])
 
 <template>
   <section class="card">
-    <h2>2) Import monthly statement (CSV)</h2>
+    <h2>Import monthly statement (CSV)</h2>
     <input type="file" @change="emit('onFile', $event)" accept=".csv">
     <select v-model="month.value">
       <option disabled value="">Select month</option>
