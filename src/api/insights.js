@@ -23,6 +23,7 @@ export async function saveInsights(insights, month, year) {
       month,
       year,
       income_total: insights.incomeTotal,
+      other_debit_total: insights.otherDebitTotal,
       foreseeable_total: insights.foreseeableTotal,
       unforeseeable_total: insights.unforeseeableTotal,
       net: insights.net,

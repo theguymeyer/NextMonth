@@ -59,6 +59,7 @@ const chartOptions = {
     </div>
     <ul class="insights-list">
       <li><strong>Total income:</strong> <span>{{ money(insights.incomeTotal) }}</span></li>
+      <li><strong>Other debit:</strong> <span>{{ money(insights.otherDebitTotal) }}</span></li>
       <li><strong>Foreseeable:</strong> <span>{{ money(insights.foreseeableTotal) }}</span></li>
       <li><strong>Unforeseeable:</strong> <span>{{ money(insights.unforeseeableTotal) }}</span></li>
       <li><strong>Net:</strong> <span>{{ money(insights.net) }}</span></li>

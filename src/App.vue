@@ -110,10 +110,11 @@ function computeInsights() {
   console.log('Staged transactions 0:', staged[0])
   const yearLabel = (year.value)
   const incomeTotal = staged.filter(t=>(t.amount>0 && t.is_income)).reduce((a,b)=>a+b.amount,0)
+  const otherDebitTotal = staged.filter(t=>(t.amount>0 && !t.is_income)).reduce((a,b)=>a+b.amount,0)
   const foreseeableTotal = staged.filter(t=>t.amount<0 && t.foreseeable).reduce((a,b)=>a+Math.abs(b.amount),0)
   const unforeseeableTotal = staged.filter(t=>t.amount<0 && !t.foreseeable).reduce((a,b)=>a+Math.abs(b.amount),0)
-  const net = incomeTotal - (foreseeableTotal + unforeseeableTotal)
-  insights.value = { monthLabel, yearLabel, incomeTotal, foreseeableTotal, unforeseeableTotal, net,
+  const net = incomeTotal + otherDebitTotal - (foreseeableTotal + unforeseeableTotal)
+  insights.value = { monthLabel, yearLabel, incomeTotal, otherDebitTotal, foreseeableTotal, unforeseeableTotal, net,
     bufferTarget: 0, reserveNow: 0, investableNow: Math.max(0, net) }
 }
 
