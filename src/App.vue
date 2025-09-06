@@ -17,19 +17,7 @@ const year = reactive({ value: '' })   // Selected year for transactions
 const rawRows = reactive([])      // Raw CSV rows imported
 const staged = reactive([])   // Staged transactions after import
 const username = reactive([])   // Staged transactions after import
-const categories = reactive([
-  'Rent',
-  'Utilities',
-  'Groceries',
-  'Transport',
-  'Health',
-  'Subscriptions',
-  'Taxes',
-  'Business',
-  'Leisure',
-  'Other'
-]) // Predefined categories
-const filters = reactive({ showIncome:true, showExpenses:true, search:'', category:'' })
+const filters = reactive({ showIncome:true, showExpenses:true, search:'' })
 const saveMsg = ref('')       // Message for save status
 const connectionMsg = ref('') // Message for connection status
 const insights = ref(null)  // Computed insights from transactions
@@ -71,7 +59,7 @@ function normalizeRow(r) {
   const dISO = new Date(dateStr).toISOString().slice(0,10)
 
   // Return normalized transaction object
-  return { id: uid(), date: dISO, description: String(desc).slice(0,200), amount, foreseeable:false, category:'', is_income: amount>0 }
+  return { id: uid(), date: dISO, description: String(desc).slice(0,200), amount, foreseeable:false, is_income: amount>0 }
 }
 
 // Confirm import: normalize all rawRows and move to staged
@@ -92,16 +80,9 @@ const filteredStaged = computed(() =>
     if (!filters.showIncome && t.amount>0) return false
     if (!filters.showExpenses && t.amount<0) return false
     if (filters.search && !t.description.toLowerCase().includes(filters.search.toLowerCase())) return false
-    if (filters.category && t.category !== filters.category) return false
     return true
   })
 )
-
-// Add a new category via prompt if it doesn't already exist
-function addCategory() {
-  const c = prompt('New category name')
-  if (c && !categories.includes(c)) categories.push(c)
-}
 
 // Save staged transactions to localStorage and compute insights
 function saveTransactions() {
@@ -163,9 +144,9 @@ async function testConnection(){ connectionMsg.value = 'Dummy: not connected' }
 
     <!-- Transactions table, shown if there are staged transactions -->
     <TransactionsTable v-if="staged.length"
-                       :filteredStaged="filteredStaged" :categories="categories"
+                       :filteredStaged="filteredStaged"
                        :saveMsg="saveMsg"
-                       @addCategory="addCategory" @saveTransactions="saveTransactions"/>
+                       @saveTransactions="saveTransactions"/>
 
     <!-- Insights summary, shown if insights are available -->
     <Insights v-if="insights" :insights="insights" :money="money"/>
