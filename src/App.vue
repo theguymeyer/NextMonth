@@ -109,7 +109,7 @@ function computeInsights() {
   console.log('month:', month.value)
   console.log('Staged transactions 0:', staged[0])
   const yearLabel = (year.value)
-  const incomeTotal = staged.filter(t=>t.amount>0).reduce((a,b)=>a+b.amount,0)
+  const incomeTotal = staged.filter(t=>(t.amount>0 && t.is_income)).reduce((a,b)=>a+b.amount,0)
   const foreseeableTotal = staged.filter(t=>t.amount<0 && t.foreseeable).reduce((a,b)=>a+Math.abs(b.amount),0)
   const unforeseeableTotal = staged.filter(t=>t.amount<0 && !t.foreseeable).reduce((a,b)=>a+Math.abs(b.amount),0)
   const net = incomeTotal - (foreseeableTotal + unforeseeableTotal)

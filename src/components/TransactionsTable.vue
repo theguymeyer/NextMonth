@@ -30,7 +30,7 @@ const emit = defineEmits(['saveTransactions'])
       </div>
       <div class="row" v-if="t.amount>0">
         <span class="label">Income:</span>
-        <input class="pretty-checkbox" type="checkbox" v-model="t.income" />
+        <input class="pretty-checkbox" type="checkbox" v-model="t.is_income" />
       </div>
     </div>
 
