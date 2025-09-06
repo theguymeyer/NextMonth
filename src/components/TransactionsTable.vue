@@ -22,12 +22,12 @@ const emit = defineEmits(['saveTransactions'])
       :class="['transaction-card', t.amount > 0 ? 'transaction-card__income' : 'transaction-card__expense']"
       >
         <div class="row">
-          <span class="data-point big-font rtl-text">{{ t.description }}</span>
-          <span class="data-point big-font">₪ {{ t.amount }}</span>
+          <span class="data-point__font big-font rtl-text">{{ t.description }}</span>
+          <span class="data-point__font big-font">₪ {{ t.amount.toFixed(2) }}</span>
         </div>
         <div class="row">
           <span class="label">Date:</span>
-          <span class="data-point">{{ t.date }}</span>
+          <span class="data-point__font">{{ t.date }}</span>
         </div>
         <div class="row" v-if="t.amount<0">
           <span class="label">Foreseeable?</span>
@@ -84,7 +84,7 @@ const emit = defineEmits(['saveTransactions'])
   margin-right: 0.5rem;
 }
 
-.data-point {
+.data-point__font {
   font-size: 0.9em;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 600;
