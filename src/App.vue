@@ -145,7 +145,8 @@ async function testConnection(){ connectionMsg.value = 'Dummy: not connected' }
 
     <!-- Transactions table, shown if there are staged transactions -->
     <TransactionsTable v-if="staged.length"
-                       :filteredStaged="filteredStaged"
+                       :rawRows="rawRows"
+                       :filteredStaged="staged"
                        :saveMsg="saveMsg"
                        @saveTransactions="saveTransactions"/>
 

@@ -1,5 +1,6 @@
 <script setup>
 const props = defineProps({
+  rawRows: Array,
   filteredStaged: Array,
   saveMsg: String
 })
@@ -9,34 +10,39 @@ const emit = defineEmits(['saveTransactions'])
 
 <template>
   <section class="card">
-    <h2>Classify transactions ({{ filteredStaged.length }})</h2>
-
-    <div
-    v-for="t in filteredStaged"
-    :key="t.id"
-    :class="['transaction-card', t.amount > 0 ? 'transaction-card__income' : 'transaction-card__expense']"
-    >
-      <div class="row">
-        <span class="data-point big-font">{{ t.description }}</span>
-        <span class="data-point big-font">₪ {{ t.amount }}</span>
-      </div>
-      <div class="row">
-        <span class="label">Date:</span>
-        <span class="data-point">{{ t.date }}</span>
-      </div>
-      <div class="row" v-if="t.amount<0">
-        <span class="label">Foreseeable?</span>
-        <input class="pretty-checkbox" type="checkbox" v-model="t.foreseeable" />
-      </div>
-      <div class="row" v-if="t.amount>0">
-        <span class="label">Income:</span>
-        <input class="pretty-checkbox" type="checkbox" v-model="t.is_income" />
-      </div>
+    <div v-if="filteredStaged.length != rawRows.length">
+      <p>Invalid Rows detected. Check file contents.</p>
     </div>
+    <div v-else>
+      <h2>Classify transactions ({{ filteredStaged.length }})</h2>
 
-    <div class="actions">
-      <button class="btn" @click="emit('saveTransactions')">Save</button>
-      <span class="save-msg">{{ saveMsg }}</span>
+      <div
+      v-for="t in filteredStaged"
+      :key="t.id"
+      :class="['transaction-card', t.amount > 0 ? 'transaction-card__income' : 'transaction-card__expense']"
+      >
+        <div class="row">
+          <span class="data-point big-font rtl-text">{{ t.description }}</span>
+          <span class="data-point big-font">₪ {{ t.amount }}</span>
+        </div>
+        <div class="row">
+          <span class="label">Date:</span>
+          <span class="data-point">{{ t.date }}</span>
+        </div>
+        <div class="row" v-if="t.amount<0">
+          <span class="label">Foreseeable?</span>
+          <input class="pretty-checkbox" type="checkbox" v-model="t.foreseeable" />
+        </div>
+        <div class="row" v-if="t.amount>0">
+          <span class="label">Income:</span>
+          <input class="pretty-checkbox" type="checkbox" v-model="t.is_income" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" @click="emit('saveTransactions')">Save</button>
+        <span class="save-msg">{{ saveMsg }}</span>
+      </div>
     </div>
   </section>
 </template>
@@ -104,6 +110,10 @@ const emit = defineEmits(['saveTransactions'])
 .pretty-checkbox {
   width: 2em;
   height: 2em;
+}
+
+.rtl-text {
+  direction: rtl;
 }
 
 </style>
